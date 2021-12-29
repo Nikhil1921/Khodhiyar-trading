@@ -264,12 +264,12 @@ class Api extends CI_Controller {
         post();
         $api = authenticate($this->table);
 
-        verifyRequiredParams(['item_id', 'rate', 'purchase_date', 'purchase_from', 'quantity']);
+        verifyRequiredParams(['item_id', 'rate', 'purchase_date', 'purchase_from']);
 
         $data = [ 
                     'item_id'       => $this->input->post('item_id'),
                     'weight'        => $this->input->post('weight'),
-                    'quantity'      => $this->input->post('quantity'),
+                    'quantity'      => $this->input->post('quantity') ? $this->input->post('quantity') : 0,
                     'rate'          => $this->input->post('rate'),
                     'purchase_date' => date('Y-m-d', strtotime($this->input->post('purchase_date'))),
                     'purchase_from' => $this->input->post('purchase_from')
@@ -294,12 +294,12 @@ class Api extends CI_Controller {
         post();
         $api = authenticate($this->table);
 
-        verifyRequiredParams(['id', 'item_id', 'rate', 'purchase_date', 'purchase_from', 'quantity']);
+        verifyRequiredParams(['id', 'item_id', 'rate', 'purchase_date', 'purchase_from']);
 
         $data = [ 
                     'item_id'       => $this->input->post('item_id'),
                     'weight'        => $this->input->post('weight'),
-                    'quantity'      => $this->input->post('quantity'),
+                    'quantity'      => $this->input->post('quantity') ? $this->input->post('quantity') : 0,
                     'rate'          => $this->input->post('rate'),
                     'purchase_date' => date('Y-m-d', strtotime($this->input->post('purchase_date'))),
                     'purchase_from' => $this->input->post('purchase_from')
