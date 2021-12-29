@@ -47,9 +47,36 @@ var table = $('.datatable').DataTable({
         url: dataTableUrl,
         type: "POST",
         data: function(data) {
-            data.date = $("#date-filter").val();
+            data.start_date = $("input[name=start-date]").val();
+            data.end_date = $("input[name=end-date]").val();
         },
         complete: function(response) {},
+    },
+    "footerCallback": function(row, data, start, end, display) {
+        if ($("input[name=rate-total]").length > 0) {
+            var api = this.api(),
+                data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function(i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                    i : 0;
+            };
+
+            // Total over this page
+            pageTotal = api
+                .column(3, { page: 'current' })
+                .data()
+                .reduce(function(a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(3).footer()).html(
+                pageTotal
+            );
+        }
     },
     "columnDefs": [{
         "targets": "target",
@@ -58,6 +85,9 @@ var table = $('.datatable').DataTable({
 });
 
 $('#date-filter').change(function() {
-    // alert($(this).val());
+    table.ajax.reload();
+});
+
+$('.reload-data').click(function() {
     table.ajax.reload();
 });

@@ -19,8 +19,11 @@ class Inventory_model extends Admin_model
             	 ->join('vendors v', 'v.id = i.purchase_from')
             	 ->join('products p', 'p.id = i.item_id');
 
-        if ($this->input->post('date')):
-            $this->db->where('i.create_date', date('Y-m-d', strtotime($this->input->post('date'))));
+        if ($this->input->post('start_date')):
+            $this->db->where('i.purchase_date >=', $this->input->post('start_date'));
+        endif;
+        if ($this->input->post('end_date')):
+            $this->db->where('i.purchase_date  <=', $this->input->post('end_date'));
         endif;
 
         $i = 0;
@@ -61,6 +64,13 @@ class Inventory_model extends Admin_model
 		$this->db->select('i.id')
 		     	 ->from($this->table)
 		         ->where(['i.is_deleted' => 0, 'v.is_deleted' => 0, 'p.is_deleted' => 0]);
+        
+        if ($this->input->post('start_date')):
+            $this->db->where('i.purchase_date >=', $this->input->post('start_date'));
+        endif;
+        if ($this->input->post('end_date')):
+            $this->db->where('i.purchase_date  <=', $this->input->post('end_date'));
+        endif;
 
 		return $this->db->join('vendors v', 'v.id = i.purchase_from')
 		            	->join('products p', 'p.id = i.item_id')
